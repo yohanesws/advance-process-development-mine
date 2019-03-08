@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dmn11:definitions xmlns="http://com.acme.fis/credit-card-dispute" xmlns:feel="http://www.omg.org/spec/FEEL/20140401" xmlns:tc="http://www.omg.org/spec/DMN/20160719/testcase" xmlns:triso="http://www.trisotech.com/2015/triso/modeling" xmlns:trisofeed="http://trisotech.com/feed" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="DMN Modeler" exporterVersion="6.1.5" id="_98" name="credit-card-dispute" namespace="http://com.acme.fis/credit-card-dispute" triso:logoChoice="Default" xmlns:dmn11="http://www.omg.org/spec/DMN/20151101/dmn.xsd">
+  <dmn11:extensionElements/>
+  <dmn11:itemDefinition label="tCardHolder" name="tCardHolder">
+    <dmn11:itemComponent id="_ecf57d4b-d506-48de-8ff0-cc636fd7c014" name="Age">
+      <dmn11:typeRef>feel:number</dmn11:typeRef>
+    </dmn11:itemComponent>
+    <dmn11:itemComponent id="_4e18edb2-499c-488a-aa80-a538d72ce5de" name="Status">
+      <dmn11:typeRef>feel:string</dmn11:typeRef>
+      <dmn11:allowedValues triso:constraintsType="enumeration">
+        <dmn11:text>"STANDARD","SILVER","GOLD"</dmn11:text>
+      </dmn11:allowedValues>
+    </dmn11:itemComponent>
+    <dmn11:itemComponent id="_7a6a3cc6-1a84-4cbb-ae6c-620c44520f14" name="IncidentCount">
+      <dmn11:typeRef>feel:number</dmn11:typeRef>
+    </dmn11:itemComponent>
+  </dmn11:itemDefinition>
+  <dmn11:itemDefinition label="tDispute" name="tDispute">
+    <dmn11:itemComponent id="_8677f7dc-6849-47c0-9214-22d7c3af0f3f" name="DisputeAmount">
+      <dmn11:typeRef>feel:number</dmn11:typeRef>
+    </dmn11:itemComponent>
+  </dmn11:itemDefinition>
+  <dmn11:inputData id="_a0725198-03af-473a-b679-de6b6a5a2126" name="Card Holder">
+    <dmn11:variable id="_efcdcf9b-937b-47f4-9852-4ef1e842fb8a" name="Card Holder" typeRef="tCardHolder"/>
+  </dmn11:inputData>
+  <dmn11:inputData id="_cdb0cf93-1fa0-4124-9ade-b227147b5ff0" name="Dispute">
+    <dmn11:variable id="_d6444be9-04c2-43b8-8c0a-a85ab1de4d29" name="Dispute" typeRef="tDispute"/>
+  </dmn11:inputData>
+  <dmn11:decision id="_eb3d8a4c-a008-4f4a-820d-189d210086ea" name="Card Holder Risk Rating">
+    <dmn11:variable id="_75901dcc-d9a8-4893-b54f-7b22844f798e" name="Card Holder Risk Rating" typeRef="feel:number"/>
+    <dmn11:informationRequirement>
+      <dmn11:requiredInput href="#_a0725198-03af-473a-b679-de6b6a5a2126"/>
+    </dmn11:informationRequirement>
+    <dmn11:decisionTable aggregation="SUM" hitPolicy="COLLECT" id="_df901004-7f84-4a12-b815-4334182979e1" outputLabel="Card Holder Risk Rating" typeRef="feel:number">
+      <dmn11:input id="_09fe536d-d8e6-49c8-8ac2-4d5c16b64594">
+        <dmn11:inputExpression typeRef="feel:number">
+          <dmn11:text>Card Holder.IncidentCount</dmn11:text>
+        </dmn11:inputExpression>
+      </dmn11:input>
+      <dmn11:input id="_8f575343-c680-475e-a102-2d5dd8a3ba3a">
+        <dmn11:inputExpression typeRef="feel:string">
+          <dmn11:text>Card Holder.Status</dmn11:text>
+        </dmn11:inputExpression>
+        <dmn11:inputValues triso:constraintsType="enumeration">
+          <dmn11:text>"STANDARD","SILVER","GOLD"</dmn11:text>
+        </dmn11:inputValues>
+      </dmn11:input>
+      <dmn11:input id="_1953ddcb-aedd-4ee3-bf61-6fa05f2eaa5b">
+        <dmn11:inputExpression typeRef="feel:number">
+          <dmn11:text>Card Holder.Age</dmn11:text>
+        </dmn11:inputExpression>
+      </dmn11:input>
+      <dmn11:output id="_4a1f4f79-3f86-4908-b7ca-c6a600177828"/>
+      <dmn11:rule id="_7dc757e0-5ce9-4bf2-88c6-a5809c1469e0">
+        <dmn11:inputEntry id="_d8752412-279e-4a8e-b4cf-9aa0695e3350">
+          <dmn11:text>&gt;2</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_bc5efd10-591b-4803-9269-198295ecd87e">
+          <dmn11:text>"GOLD"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_d3fd6bb5-af54-401e-a095-d5e00846b733">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_0f6f2fcb-175a-4d32-9557-f4eeeba5f05c">
+          <dmn11:text>1</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_346548c8-1f2a-495c-b492-311169a7f11d">
+        <dmn11:inputEntry id="_ea162a2b-7da3-4cc0-a1a7-22d67a5e88de">
+          <dmn11:text>&gt;2</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_31a96b4f-63f3-4a2c-a514-9d7074e51eb9">
+          <dmn11:text>"SILVER"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_272b28fc-73fa-47b1-94d1-b121d11e6951">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_ff6b29a2-73f3-4822-ac02-f9d776ae152a">
+          <dmn11:text>2</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_dba6fcc6-ae4f-48a4-821a-a69603fd4610">
+        <dmn11:inputEntry id="_982a4f8d-cafb-4df0-a37b-d4843a8d3dbc">
+          <dmn11:text>&gt;2</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_1febb86a-121b-4522-9188-6be3ff54bfce">
+          <dmn11:text>"STANDARD"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_281d2e6b-099c-41e1-9513-b237883949a9">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_38b4505e-45c5-49aa-966e-348bc79e14f1">
+          <dmn11:text>3</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_0458a341-06f0-478c-96b5-937d17dc902c">
+        <dmn11:inputEntry id="_8012451d-92d1-4738-bec0-80fa59125e50">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_e7d97a4d-9c73-48d6-a679-8e24d1ec8738">
+          <dmn11:text>"SILVER"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_964f6512-2d15-46eb-a68c-f76e0f5af9c1">
+          <dmn11:text>&lt; 25</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_0e6dc0ba-b0a0-486d-a495-68a18b2d92f0">
+          <dmn11:text>1</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_bcc51b3e-f65d-4f2a-9b8c-d4832a6ee851">
+        <dmn11:inputEntry id="_2bd04344-b050-4dd5-9945-00fef4ccc62b">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_7cb4da9b-7de2-47e2-ae33-3a49329ccad4">
+          <dmn11:text>"STANDARD"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_48938994-c735-49c3-bda5-6ca07fa026e4">
+          <dmn11:text>&lt; 25</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_18c20537-c8de-4050-9601-35b17d0d4829">
+          <dmn11:text>2</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_946a64d9-c83b-4b4a-bb66-923aca12349d">
+        <dmn11:inputEntry id="_2821023f-a48f-4033-af5b-c5c6ca1d2a06">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_a761d15f-5b23-4830-99b5-4be559dc104c">
+          <dmn11:text>"STANDARD"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_2964cf9c-fc89-47fc-b5bc-9242c8ae0a8a">
+          <dmn11:text>&gt;= 25</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_b2c726b1-5cbe-4206-a831-1ce14dca8619">
+          <dmn11:text>1</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_f3b94087-128d-437c-b542-56160ab8eb32">
+        <dmn11:inputEntry id="_5d649075-ab9e-4c48-923a-87efc7652039">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_d96832d2-1fce-46b4-971a-19385f8249e8">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_dbeeac25-1852-4d16-ab16-54e3971e975f">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_b8d78df5-7a9e-4f4b-9e54-44e92db4e97f">
+          <dmn11:text>0</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+    </dmn11:decisionTable>
+  </dmn11:decision>
+  <dmn11:decision id="_537eb227-439f-4e38-bb98-703dc4613eb7" name="Dispute Risk Rating">
+    <dmn11:variable id="_a372b185-c72e-44b0-85dc-37e1c4fb63f6" name="Dispute Risk Rating" typeRef="feel:number"/>
+    <dmn11:informationRequirement>
+      <dmn11:requiredInput href="#_cdb0cf93-1fa0-4124-9ade-b227147b5ff0"/>
+    </dmn11:informationRequirement>
+    <dmn11:informationRequirement>
+      <dmn11:requiredInput href="#_a0725198-03af-473a-b679-de6b6a5a2126"/>
+    </dmn11:informationRequirement>
+    <dmn11:decisionTable hitPolicy="UNIQUE" id="_9b8c5c74-85cc-49ea-a6c6-93292133e454" outputLabel="Dispute Risk Rating" typeRef="feel:number">
+      <dmn11:input id="_2a12f56c-59e2-482b-b071-0fd9bd1d5dcc">
+        <dmn11:inputExpression typeRef="feel:string">
+          <dmn11:text>Card Holder.Status</dmn11:text>
+        </dmn11:inputExpression>
+        <dmn11:inputValues triso:constraintsType="enumeration">
+          <dmn11:text>"STANDARD","SILVER","GOLD"</dmn11:text>
+        </dmn11:inputValues>
+      </dmn11:input>
+      <dmn11:input id="_942038b8-b79b-457c-a857-5005d380a982">
+        <dmn11:inputExpression typeRef="feel:number">
+          <dmn11:text>Dispute.DisputeAmount</dmn11:text>
+        </dmn11:inputExpression>
+      </dmn11:input>
+      <dmn11:output id="_af85a6b7-ed03-4365-8a40-1e4da7bd9dac"/>
+      <dmn11:rule id="_26d7ae29-5031-4e27-b614-44b2313d3698">
+        <dmn11:inputEntry id="_65dfacca-4d24-4467-88e2-19da80c8d3bd">
+          <dmn11:text>"STANDARD"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_4067637c-f04c-4122-a004-7114cf0572cb">
+          <dmn11:text>&lt; 100</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_134ebe3d-bac7-4317-bf34-c69e95f0e137">
+          <dmn11:text>1</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_5e9057cf-6044-4427-ad57-d4d029a7d03e">
+        <dmn11:inputEntry id="_e58c250b-8b9f-4d37-ad1d-b14177d68624">
+          <dmn11:text>"SILVER"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_64a8a232-ab7a-4768-b9f9-933bc46dbb75">
+          <dmn11:text>&lt; 250</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_16f75a99-97f2-454e-9ad4-05f7f1e437ad">
+          <dmn11:text>1</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_d7654084-3aca-4e8d-bf2f-95b4d44864d7">
+        <dmn11:inputEntry id="_ff8a13fd-8608-4c6d-9508-ae4ca4c4401e">
+          <dmn11:text>"GOLD"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_ab5c20a2-a95d-449b-9015-9662a7fb57ad">
+          <dmn11:text>&lt; 500</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_52680b0c-2eb8-49c6-9731-7515bd563de4">
+          <dmn11:text>1</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_68ffe0ed-5f96-4aee-9d13-aa5031b33dd1">
+        <dmn11:inputEntry id="_9bfca948-5eea-4dce-a5ed-8704091d619b">
+          <dmn11:text>"STANDARD"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_a5fbfa52-0cb5-4e78-b1c5-5906b1e6bd6b">
+          <dmn11:text>[100..500)</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_b81d514d-1831-4267-a38d-34955e607328">
+          <dmn11:text>3</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_3bdf82ec-c346-47e4-b3f1-adf460b070ad">
+        <dmn11:inputEntry id="_3d973bbf-03e4-4146-aef2-ca968221ddce">
+          <dmn11:text>"SILVER"</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_e63768a6-11fd-4a36-a522-c9da7f4079f9">
+          <dmn11:text>[250..500)</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_db7bdf21-cc67-4e0a-8fef-f3d439e7ed28">
+          <dmn11:text>2</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+      <dmn11:rule id="_7349effd-87c2-4caa-aaed-4ea43135cedb">
+        <dmn11:inputEntry id="_e5d2218c-40d4-4048-a3eb-99bf6b6199d4">
+          <dmn11:text>-</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:inputEntry id="_24ac0cf2-36a1-4493-b162-7df7894d9634">
+          <dmn11:text>&gt;= 500</dmn11:text>
+        </dmn11:inputEntry>
+        <dmn11:outputEntry id="_08985140-8f6b-4e29-8333-a2a61f4d891a">
+          <dmn11:text>5</dmn11:text>
+        </dmn11:outputEntry>
+      </dmn11:rule>
+    </dmn11:decisionTable>
+  </dmn11:decision>
+  <dmn11:decision id="_abe69b67-6894-4350-b680-590f02a1a9ac" name="Automatic Processing">
+    <dmn11:variable id="_4cbbd457-4c9f-4f12-9730-7596c9d03087" name="Automatic Processing" typeRef="feel:boolean"/>
+    <dmn11:informationRequirement>
+      <dmn11:requiredDecision href="#_eb3d8a4c-a008-4f4a-820d-189d210086ea"/>
+    </dmn11:informationRequirement>
+    <dmn11:informationRequirement>
+      <dmn11:requiredDecision href="#_537eb227-439f-4e38-bb98-703dc4613eb7"/>
+    </dmn11:informationRequirement>
+    <dmn11:literalExpression id="_67e7af45-1832-47d3-b28e-66903c068b85" typeRef="feel:boolean">
+      <dmn11:text>(Card Holder Risk Rating + Dispute Risk Rating) &lt; 5</dmn11:text>
+    </dmn11:literalExpression>
+  </dmn11:decision>
+</dmn11:definitions>
